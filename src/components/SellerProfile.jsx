@@ -78,3 +78,5 @@ await sellerDoc.ref.update({
 });
 
 export default SellerProfile;
+if (loading) return <p>Loading...</p>;
+if (error) return <p>Error loading profile.</p>;

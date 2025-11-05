@@ -21,3 +21,16 @@ export const auth = getAuth(app);
   responseRate: 0.95,
   transactions: 18
 }
+import { initializeApp } from 'firebase/app';
+import { getAnalytics } from 'firebase/analytics';
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+import { logEvent } from 'firebase/analytics';
+logEvent(analytics, 'review_submitted', { sellerId });
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
+
+initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider('your-site-key'),
+  isTokenAutoRefreshEnabled: true
+});

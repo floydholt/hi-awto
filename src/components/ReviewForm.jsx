@@ -123,3 +123,5 @@ await addDoc(collection(db, 'reviews'), {
   timestamp: serverTimestamp(),
   flagged: false // default
 });
+if (loading) return <p>Loading...</p>;
+if (error) return <p>Error loading profile.</p>;
