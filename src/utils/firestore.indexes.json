@@ -1,0 +1,20 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "reviews",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "sellerId", "order": "ASCENDING" },
+        { "fieldPath": "rating", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "messages",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "sellerEmail", "order": "ASCENDING" },
+        { "fieldPath": "replyTimestamp", "order": "DESCENDING" }
+      ]
+    }
+  ]
+}
