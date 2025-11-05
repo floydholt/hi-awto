@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Only authenticated users can read/write their own saved listings
+    match /savedListings/{docId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+
+    // Only sellers can read messages sent to them
+    match /messages/{docId} {
+      allow create: if request.auth != null;
+      allow read, update: if request.auth != null && request.auth.token.email == resource.data.sellerEmail;
+    }
+
+    // Buyers can read/write their own applications
+    match /buyerApplications/{docId} {
+      allow read, write: if request.auth != null && request.auth.token.email == resource.data.email;
+    }
+
+    // Listings are public
+    match /listings/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}
+match /reviews/{docId} {
+  allow read: if true;
+  allow write: if request.auth != null && request.resource.data.buyerEmail == request.auth.token.email;
+}
+
+match /reviews/{docId} {
+  allow read: if true;
+  allow write: if request.auth != null &&
+    request.resource.data.buyerEmail == request.auth.token.email &&
+    exists(/databases/$(database)/documents/buyerApplications/$(docId)) &&
+    get(/databases/$(database)/documents/buyerApplications/$(docId)).data.status == 'approved';
+}
+match /reviews/{docId} {
+  allow read: if true;
+  allow write: if request.auth != null &&
+    request.resource.data.buyerEmail == request.auth.token.email &&
+    exists(/databases/$(database)/documents/buyerApplications/$(docId)) &&
+    get(/databases/$(database)/documents/buyerApplications/$(docId)).data.status in ['approved', 'completed'];
+}
